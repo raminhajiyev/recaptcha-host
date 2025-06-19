@@ -3,14 +3,18 @@
 <head>
     <title>Phone Verification - reCAPTCHA</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; margin-top: 40px; }
+        #manual-btn { display: none; margin-top: 20px; }
+    </style>
 </head>
 <body>
 
 <h3>Verifying... Please wait</h3>
 
-<!-- Invisible reCAPTCHA widget -->
 <form id="recaptcha-form" action="?" method="POST">
     <button
+        id="recaptcha-btn"
         class="g-recaptcha"
         data-sitekey="6LccqmYrAAAAAFDEosoT_K0VCHdjU_MZvXa3zZFr"
         data-callback="onRecaptchaSuccess"
@@ -19,19 +23,38 @@
     </button>
 </form>
 
+<button id="manual-btn" onclick="manualTrigger()">Try Again</button>
+
 <script>
-    // Trigger reCAPTCHA on page load
+    let recaptchaTriggered = false;
+    let recaptchaTimeout = null;
+
     window.onload = function() {
-        document.querySelector('.g-recaptcha').click();
+        try {
+            document.getElementById('recaptcha-btn').click();
+            recaptchaTriggered = true;
+            // Set a timeout in case reCAPTCHA never responds
+            recaptchaTimeout = setTimeout(function() {
+                alert('reCAPTCHA did not respond. If you are on an emulator, try a real device.');
+                document.getElementById('manual-btn').style.display = 'inline-block';
+            }, 10000);
+        } catch (e) {
+            alert('Error triggering reCAPTCHA: ' + e);
+            document.getElementById('manual-btn').style.display = 'inline-block';
+        }
     };
 
     function onRecaptchaSuccess(token) {
-        console.log('reCAPTCHA success:', token);
-
-        // Fallback: navigate URL with token (for MAUI WebView or simple WebView)
+        if (recaptchaTimeout) clearTimeout(recaptchaTimeout);
+        alert('reCAPTCHA success! Token: ' + token); // For debugging
         window.location.href = 'recaptcha://token?value=' + encodeURIComponent(token);
+    }
+
+    function manualTrigger() {
+        document.getElementById('recaptcha-btn').click();
+        document.getElementById('manual-btn').style.display = 'none';
     }
 </script>
 
 </body>
-</html>
+</html> 
