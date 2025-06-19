@@ -28,17 +28,8 @@
     function onRecaptchaSuccess(token) {
         console.log('reCAPTCHA success:', token);
 
-        // Pass token back to mobile app (using WebView callback)
-        if (window.ReactNativeWebView) {
-            // For React Native WebView
-            window.ReactNativeWebView.postMessage(token);
-        } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.captcha) {
-            // For iOS WebView
-            window.webkit.messageHandlers.captcha.postMessage(token);
-        } else {
-            // Fallback: navigate URL with token (for MAUI WebView or simple WebView)
-            window.location.href = 'bookme://recaptcha?token=' + token;
-        }
+        // Fallback: navigate URL with token (for MAUI WebView or simple WebView)
+        window.location.href = 'recaptcha://token?value=' + encodeURIComponent(token);
     }
 </script>
 
