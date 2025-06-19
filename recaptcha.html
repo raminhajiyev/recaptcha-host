@@ -1,26 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Invisible reCAPTCHA v2</title>
+    <title>reCAPTCHA v2 - Checkbox</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
-        function onSubmit(token) {
+        function onSuccess(token) {
+            // Send token back to app using URL schema
             window.location.href = "recaptcha://token?value=" + token;
-        }
-        function executeCaptcha() {
-            grecaptcha.execute();
         }
     </script>
 </head>
-<body onload="executeCaptcha()">
+<body>
     <h3>Please verify you are not a robot:</h3>
-    <form>
-        <button class="g-recaptcha"
-                data-sitekey="6Lfmm2YrAAAAADzETI23SyGOA-Z5pJkP0lOoy_rz"
-                data-callback='onSubmit'
-                data-size='invisible'>
-            Verify
-        </button>
-    </form>
+    <div class="g-recaptcha"
+         data-sitekey="6Lfmm2YrAAAAADzETI23SyGOA-Z5pJkP0lOoy_rz"
+         data-callback="onSuccess">
+    </div>
 </body>
 </html>
