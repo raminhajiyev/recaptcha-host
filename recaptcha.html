@@ -33,7 +33,6 @@
         try {
             document.getElementById('recaptcha-btn').click();
             recaptchaTriggered = true;
-            // Set a timeout in case reCAPTCHA never responds
             recaptchaTimeout = setTimeout(function() {
                 alert('reCAPTCHA did not respond. If you are on an emulator, try a real device.');
                 document.getElementById('manual-btn').style.display = 'inline-block';
@@ -47,7 +46,12 @@
     function onRecaptchaSuccess(token) {
         if (recaptchaTimeout) clearTimeout(recaptchaTimeout);
 
-        window.location.href = 'recaptcha://token?value=' + encodeURIComponent(token);
+        // Try sending via postMessage — works in MAUI WebView
+        console.log("Sending token via postMessage: " + token);
+        window.parent.postMessage(token, "*");
+
+        // Fallback if postMessage is blocked (rare)
+        // window.location.href = 'recaptcha://token?value=' + encodeURIComponent(token);
     }
 
     function manualTrigger() {
