@@ -1,20 +1,46 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>reCAPTCHA v2 - Checkbox</title>
+    <title>Phone Verification - reCAPTCHA</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <script>
-        function onSuccess(token) {
-            // Send token back to app using URL schema
-            window.location.href = "recaptcha://token?value=" + token;
-        }
-    </script>
 </head>
 <body>
-    <h3>Please verify you are not a robot:</h3>
-    <div class="g-recaptcha"
-         data-sitekey="6Lfmm2YrAAAAADzETI23SyGOA-Z5pJkP0lOoy_rz"
-         data-callback="onSuccess">
-    </div>
+
+<h3>Verifying... Please wait</h3>
+
+<!-- Invisible reCAPTCHA widget -->
+<form id="recaptcha-form" action="?" method="POST">
+    <button
+        class="g-recaptcha"
+        data-sitekey="6LccqmYrAAAAAFDEosoT_K0VCHdjU_MZvXa3zZFr"
+        data-callback="onRecaptchaSuccess"
+        data-size="invisible">
+        Verify & Send Code
+    </button>
+</form>
+
+<script>
+    // Trigger reCAPTCHA on page load
+    window.onload = function() {
+        document.querySelector('.g-recaptcha').click();
+    };
+
+    function onRecaptchaSuccess(token) {
+        console.log('reCAPTCHA success:', token);
+
+        // Pass token back to mobile app (using WebView callback)
+        if (window.ReactNativeWebView) {
+            // For React Native WebView
+            window.ReactNativeWebView.postMessage(token);
+        } else if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.captcha) {
+            // For iOS WebView
+            window.webkit.messageHandlers.captcha.postMessage(token);
+        } else {
+            // Fallback: navigate URL with token (for MAUI WebView or simple WebView)
+            window.location.href = 'bookme://recaptcha?token=' + token;
+        }
+    }
+</script>
+
 </body>
 </html>
