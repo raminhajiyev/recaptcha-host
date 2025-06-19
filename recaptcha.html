@@ -46,7 +46,7 @@
 
     function onRecaptchaSuccess(token) {
         if (recaptchaTimeout) clearTimeout(recaptchaTimeout);
-        alert('reCAPTCHA success! Token: ' + token); // For debugging
+
         window.location.href = 'recaptcha://token?value=' + encodeURIComponent(token);
     }
 
@@ -57,4 +57,4 @@
 </script>
 
 </body>
-</html> 
+</html>
