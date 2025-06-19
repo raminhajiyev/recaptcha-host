@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>reCAPTCHA v2</title>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <script>
+        function onSuccess(token) {
+            window.location.href = "recaptcha://token?value=" + token;
+        }
+    </script>
+</head>
+<body>
+    <h3>Please verify you are not a robot:</h3>
+    <div class="g-recaptcha"
+         data-sitekey="6Lfmm2YrAAAAADzETI23SyGOA-Z5pJkP0lOoy_rz"
+         data-callback="onSuccess">
+    </div>
+</body>
+</html>
