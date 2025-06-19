@@ -1,19 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>reCAPTCHA v2</title>
+    <title>Invisible reCAPTCHA v2</title>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
-        function onSuccess(token) {
+        function onSubmit(token) {
             window.location.href = "recaptcha://token?value=" + token;
+        }
+        function executeCaptcha() {
+            grecaptcha.execute();
         }
     </script>
 </head>
-<body>
+<body onload="executeCaptcha()">
     <h3>Please verify you are not a robot:</h3>
-    <div class="g-recaptcha"
-         data-sitekey="6Lfmm2YrAAAAADzETI23SyGOA-Z5pJkP0lOoy_rz"
-         data-callback="onSuccess">
-    </div>
+    <form>
+        <button class="g-recaptcha"
+                data-sitekey="6Lfmm2YrAAAAADzETI23SyGOA-Z5pJkP0lOoy_rz"
+                data-callback='onSubmit'
+                data-size='invisible'>
+            Verify
+        </button>
+    </form>
 </body>
 </html>
